@@ -18,3 +18,27 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.iml
+
+# Symfony / PHP
+node_modules/
+public/bundles/
+.env.local
+.env.local.php
+.env.*.local
+.phpunit.result.cache
+.php-cs-fixer.cache
+
+# Build / coverage
+coverage/
+build/
+phpunit.xml.cache
+
+# Misc
+*.swp
