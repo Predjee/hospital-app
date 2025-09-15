@@ -1,0 +1,22 @@
+includes:
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+    - vendor/phpstan/phpstan-symfony/extension.neon
+    - vendor/phpstan/phpstan-symfony/rules.neon
+
+parameters:
+    level: 7
+    paths:
+        - src
+
+    excludePaths:
+        - src/Migrations/*
+        - var/*
+        - tests/bootstrap.php
+
+    # Doctrine entities hebben vaak "alleen door de ORM geschreven" properties
+    treatPhpDocTypesAsCertain: false
+
+    ignoreErrors:
+
+    reportUnmatchedIgnoredErrors: true
+    tmpDir: var/phpstan

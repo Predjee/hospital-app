@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% set Status = enum('App\\Enum\\PatientStatus') %}
+
+    <h2 class="text-xl font-bold mb-4">Patiëntsamenvattingen</h2>
+    <table class="table-auto w-full bg-white shadow rounded">
+        <thead>
+        <tr class="bg-gray-200">
+            <th class="p-2 text-left">ID</th>
+            <th class="p-2 text-left">Naam</th>
+            <th class="p-2 text-left">Leeftijd</th>
+            <th class="p-2 text-left">Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for patient in patients %}
+            <tr>
+                <td class="p-2">{{ patient.id }}</td>
+                <td class="p-2">{{ patient.name }}</td>
+                <td class="p-2">{{ patient.age }}</td>
+                <td class="p-2">
+                    {% if patient.status.value == Status.ADMITTED.value %}
+                        <span class="px-2 py-1 bg-green-200 text-green-800 rounded">Opgenomen</span>
+                    {% elseif patient.status.value == Status.DISCHARGED.value %}
+                        <span class="px-2 py-1 bg-gray-200 text-gray-800 rounded">Ontslagen</span>
+                    {% elseif patient.status.value == Status.ICU.value %}
+                        <span class="px-2 py-1 bg-red-200 text-red-800 rounded">IC</span>
+                    {% else %}
+                        <span class="px-2 py-1 bg-yellow-200 text-yellow-800 rounded">kweettookniemeer</span>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
