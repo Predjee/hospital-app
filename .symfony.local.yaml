@@ -1,0 +1,5 @@
+workers:
+  tailwind:
+    cmd: ['symfony', 'console', 'tailwind:build', '--watch']
+  messenger:
+    cmd: ['php', 'bin/console', 'messenger:consume', 'async', '--memory-limit=128M', '--no-interaction']

@@ -1,0 +1,6 @@
+{% if not treatment.completed %}
+    <span
+        class="{{ this.colorClass }} text-xs font-medium me-2 px-2.5 py-0.5 rounded">
+        {{ this.label }}
+    </span>
+{% endif %}
