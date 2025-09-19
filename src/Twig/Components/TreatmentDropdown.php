@@ -52,8 +52,5 @@ final class TreatmentDropdown
         }
 
         $this->message = $this->resolver->resolve($patient, $treatment);
-
-        // Quick & dirty persistence dit gaan we later beter doen
-        $this->em->flush();
     }
 }

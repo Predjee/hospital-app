@@ -34,31 +34,25 @@ class TreatmentDropdownTest extends KernelTestCase
 
     public function testDropdownShowsOnlyPendingTreatments(): void
     {
-        // 1. Patiënt opslaan
         $patient = new Patient('Test Patient');
         $this->entityManager->persist($patient);
         $this->entityManager->flush();
 
-        // 2. Treatments toevoegen
         $pending = new Treatment($patient, TreatmentType::MRI, false);
         $completed = new Treatment($patient, TreatmentType::PHYSIOTHERAPY, true);
         $this->entityManager->persist($pending);
         $this->entityManager->persist($completed);
         $this->entityManager->flush();
 
-        // 3. Entity manager clearen
         $this->entityManager->clear();
 
-        // 4. Patient opnieuw ophalen zodat we een geldige ID hebben
         $patient = $this->patients->findOneBy(['name' => 'Test Patient']);
         self::assertNotNull($patient);
 
-        // 5. Component aanmaken
         $component = $this->createLiveComponent('TreatmentDropdown', [
             'patientId' => $patient->getId(),
         ]);
 
-        // 6. Renderen en asserten
         $html = $component->render()->toString();
 
         $this->assertStringContainsString('MRI-scan', $html);

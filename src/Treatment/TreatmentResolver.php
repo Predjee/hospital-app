@@ -27,7 +27,10 @@ readonly class TreatmentResolver
             if ($strategy->supports($patient, $type)) {
                 $message = $strategy->treat($patient);
 
-                // quick & dirty: behandel af en check ontslagregel
+                // Quick & dirty persistence
+                $this->em->persist($patient);
+                $patient->findTreatmentByType($type)?->complete();
+
                 if (empty($patient->getPendingTreatments())) {
                     $patient->discharge();
                 }
