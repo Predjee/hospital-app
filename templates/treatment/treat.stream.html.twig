@@ -1,0 +1,20 @@
+<turbo-stream action="replace" target="patient-{{ patient.id }}">
+    <template>
+        {% include 'patient/_row.html.twig' with { patient: patient } %}
+    </template>
+</turbo-stream>
+
+<turbo-stream action="append" target="flashes">
+    <template>
+        <div class="p-3 mb-2 rounded
+            {% if type == 'success' %} bg-green-100 text-green-800
+            {% elseif type == 'error' %} bg-red-100 text-red-800
+            {% endif %}
+        "
+             data-controller="auto-dismiss"
+             data-auto-dismiss-timeout-value="5000"
+        >
+            {{ message }}
+        </div>
+    </template>
+</turbo-stream>

@@ -1,0 +1,42 @@
+{% set Status = enum('App\\Patient\\Domain\\Enum\\PatientStatus') %}
+
+<tr class="border-b" id="patient-{{ patient.id }}">
+    <td class="p-2 whitespace-nowrap">{{ patient.name }}</td>
+    <td class="p-2 whitespace-nowrap">{{ patient.age }}</td>
+    <td class="p-2 whitespace-nowrap">
+        <span class="px-2 py-1 rounded {{ patient.status.colorClass() }}">
+            {{ patient.status.label() }}
+        </span>
+    </td>
+    <td class="p-2 whitespace-nowrap">
+        {% for treatment in patient.treatments %}
+        <twig:TreatmentBadge :treatment="treatment"/>
+        {% endfor %}
+    </td>
+    <td class="p-2 whitespace-nowrap">
+        {% if patient.status != Status.DISCHARGED and patient.treatments|filter(t => not t.completed) %}
+            <form
+                method="post"
+                action="{{ path('treat_patient') }}"
+                data-turbo-stream
+                class="flex items-center space-x-2"
+            >
+                <label>
+                    <select name="treatmentId" class="px-2 py-1 border rounded text-sm">
+                        {% for treatment in patient.treatments|filter(t => not t.completed) %}
+                            <option value="{{ treatment.id.toRfc4122() }}">
+                                {{ treatment.type.label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <button
+                    type="submit"
+                    class="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                >
+                    Start
+                </button>
+            </form>
+        {% endif %}
+    </td>
+</tr>

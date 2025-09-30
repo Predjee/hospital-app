@@ -7,5 +7,15 @@ import './bootstrap.js';
  */
 import './styles/app.css';
 import 'flowbite';
+import 'flowbite-datepicker';
+import { initFlowbite } from 'flowbite';
+
+document.addEventListener('turbo:render', () => {
+    initFlowbite();
+});
+document.addEventListener('turbo:frame-render', () => {
+    initFlowbite();
+});
+
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');

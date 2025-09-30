@@ -1,58 +1,16 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {% set Status = enum('App\\Enum\\PatientStatus') %}
+    <div class="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <h2 class="text-xl font-bold">
+            Patiëntsamenvattingen
+        </h2>
 
-    <h2 class="text-xl font-bold mb-4">Patiëntsamenvattingen</h2>
+        <div id="flashes" class="mt-4 space-y-2"></div>
 
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="p-3 mb-2 rounded
-                {% if label == 'success' %} bg-green-100 text-green-800
-                {% elseif label == 'error' %} bg-red-100 text-red-800
-                {% endif %}
-            ">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endfor %}
-
-    <div class="overflow-x-auto">
-        <table class="min-w-full table-auto bg-white shadow rounded">
-            <thead class="bg-gray-200 text-xs uppercase text-gray-600">
-            <tr>
-                <th class="p-2 text-left">ID</th>
-                <th class="p-2 text-left">Naam</th>
-                <th class="p-2 text-left">Leeftijd</th>
-                <th class="p-2 text-left">Status</th>
-                <th class="p-2 text-left">Behandelingen</th>
-                <th class="p-2 text-left">Acties</th>
-            </tr>
-            </thead>
-            <tbody class="text-sm">
-            {% for patient in patients %}
-                <tr class="border-b">
-                    <td class="p-2 whitespace-nowrap">{{ patient.id }}</td>
-                    <td class="p-2 whitespace-nowrap">{{ patient.name }}</td>
-                    <td class="p-2 whitespace-nowrap">{{ patient.age }}</td>
-                    <td class="p-2 whitespace-nowrap">
-                        <span class="px-2 py-1 rounded {{ patient.status.colorClass() }}">
-                            {{ patient.status.getLabel() }}
-                        </span>
-                    </td>
-                    <td class="p-2 whitespace-nowrap">
-                        {% for treatment in patient.treatments %}
-                            <twig:TreatmentBadge :treatment="treatment" />
-                        {% endfor %}
-                    </td>
-                    <td class="p-2 whitespace-nowrap">
-                        {% if patient.status != Status.DISCHARGED and patient.treatments|filter(t => not t.completed) %}
-                            <twig:TreatmentDropdown :patientId="patient.id" />
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        {% include 'patient/_admit_modal.html.twig' %}
     </div>
+    <turbo-frame id="patients">
+        {% include 'patient/_patients_table.html.twig' with { patients: patients } %}
+    </turbo-frame>
 {% endblock %}
