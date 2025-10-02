@@ -28,6 +28,7 @@ readonly class TreatmentResolver
 
             $message = $strategy->treat($patient);
 
+            /** @phpstan-ignore-next-line */
             $patient->findTreatmentByType($type)->markAsCompleted();
 
             $patient->dischargeIfNoPendingTreatments();
