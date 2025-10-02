@@ -1,0 +1,9 @@
+<turbo-stream action="append" target="flashes">
+    <template>
+        <div class="p-3 mb-2 rounded bg-red-100 text-red-800"
+             data-controller="auto-dismiss"
+             data-auto-dismiss-timeout-value="7000">
+            ⚠️ {{ message }}
+        </div>
+    </template>
+</turbo-stream>

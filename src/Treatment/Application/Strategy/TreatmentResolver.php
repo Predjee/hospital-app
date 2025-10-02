@@ -28,6 +28,8 @@ readonly class TreatmentResolver
 
             $message = $strategy->treat($patient);
 
+            $patient->findTreatmentByType($type)->markAsCompleted();
+
             $patient->dischargeIfNoPendingTreatments();
 
             return $message;

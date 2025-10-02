@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace App\Treatment\Infrastructure\EventSubscriber;
 
-use App\Treatment\Domain\Entity\Treatment;
+use App\Audit\Application\Command\RecordActionCommand;
 use App\Treatment\Domain\Event\TreatmentCancelledEvent;
 use App\Treatment\Domain\Event\TreatmentCompletedEvent;
 use App\Treatment\Domain\Event\TreatmentStartedEvent;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Exception\ORMException;
-use Doctrine\ORM\OptimisticLockException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 final readonly class TreatmentLifecycleSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private EntityManagerInterface $em)
+    public function __construct(private MessageBusInterface $bus)
     {
     }
 
@@ -28,39 +26,27 @@ final readonly class TreatmentLifecycleSubscriber implements EventSubscriberInte
         ];
     }
 
-    /**
-     * @throws OptimisticLockException
-     * @throws ORMException
-     */
     public function onTreatmentStarted(TreatmentStartedEvent $event): void
     {
-        /** @var Treatment $treatment */
-        $treatment = $this->em->find(Treatment::class, $event->treatmentId);
-        $treatment->start();
-        $this->em->flush();
+        $this->bus->dispatch(new RecordActionCommand(
+            'treatment.started',
+            ['id' => $event->treatmentId, 'patientId' => $event->patientId]
+        ));
     }
 
-    /**
-     * @throws OptimisticLockException
-     * @throws ORMException
-     */
     public function onTreatmentCompleted(TreatmentCompletedEvent $event): void
     {
-        /** @var Treatment $treatment */
-        $treatment = $this->em->find(Treatment::class, $event->treatmentId);
-        $treatment->complete();
-        $this->em->flush();
+        $this->bus->dispatch(new RecordActionCommand(
+            'treatment.completed',
+            ['id' => $event->treatmentId, 'patientId' => $event->patientId]
+        ));
     }
 
-    /**
-     * @throws OptimisticLockException
-     * @throws ORMException
-     */
     public function onTreatmentCancelled(TreatmentCancelledEvent $event): void
     {
-        /** @var Treatment $treatment */
-        $treatment = $this->em->find(Treatment::class, $event->treatmentId);
-        $treatment->cancel();
-        $this->em->flush();
+        $this->bus->dispatch(new RecordActionCommand(
+            'treatment.cancelled',
+            ['id' => $event->treatmentId, 'patientId' => $event->patientId]
+        ));
     }
 }

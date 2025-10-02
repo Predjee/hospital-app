@@ -10,6 +10,7 @@ enum TreatmentType: string
     case REHAB = 'rehab';
     case MRI = 'mri';
     case PHYSIOTHERAPY = 'physiotherapy';
+    case INTAKE = 'intake';
 
     public function getLabel(): string
     {
@@ -18,6 +19,7 @@ enum TreatmentType: string
             self::MRI => 'MRI-scan',
             self::PHYSIOTHERAPY => 'Fysiotherapie',
             self::REHAB => 'Revalidatie',
+            self::INTAKE => 'Intake',
         };
     }
 
@@ -28,6 +30,7 @@ enum TreatmentType: string
             TreatmentType::MRI => 'bg-blue-100 text-blue-800',
             TreatmentType::PHYSIOTHERAPY => 'bg-green-100 text-green-800',
             TreatmentType::REHAB => 'bg-yellow-100 text-yellow-800',
+            TreatmentType::INTAKE => 'bg-green-100 text-black-800',
         };
     }
 }

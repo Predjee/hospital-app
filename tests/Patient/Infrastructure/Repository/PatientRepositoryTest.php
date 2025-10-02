@@ -7,7 +7,7 @@ namespace App\Tests\Patient\Infrastructure\Repository;
 use App\Patient\Domain\Entity\Patient;
 use App\Patient\Domain\Enum\PatientStatus;
 use App\Patient\Infrastructure\DataFixtures\PatientFixtures;
-use App\Patient\Infrastructure\Repository\PatientRepository;
+use App\Patient\Infrastructure\Repository\DoctrinePatientRepository;
 use App\Treatment\Domain\Entity\Treatment;
 use App\Treatment\Domain\Enum\TreatmentType;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
@@ -16,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 final class PatientRepositoryTest extends KernelTestCase
 {
-    private PatientRepository $repo;
+    private DoctrinePatientRepository $repo;
     private AbstractDatabaseTool $databaseTool;
 
     protected function setUp(): void
@@ -24,7 +24,7 @@ final class PatientRepositoryTest extends KernelTestCase
         self::bootKernel();
 
         $container = PatientRepositoryTest::getContainer();
-        $this->repo = $container->get(PatientRepository::class);
+        $this->repo = $container->get(DoctrinePatientRepository::class);
 
         $this->databaseTool = $container->get(DatabaseToolCollection::class)->get();
 

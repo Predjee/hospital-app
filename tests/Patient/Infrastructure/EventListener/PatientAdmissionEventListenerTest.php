@@ -4,45 +4,38 @@ declare(strict_types=1);
 
 namespace App\Tests\Patient\Infrastructure\EventListener;
 
+use App\Audit\Application\Command\RecordActionCommand;
 use App\Patient\Domain\Entity\Patient;
 use App\Patient\Domain\Enum\PatientStatus;
 use App\Patient\Domain\Event\PatientAdmittedEvent;
 use App\Patient\Infrastructure\EventListener\PatientAdmittedListener;
+use App\Treatment\Application\Command\AssignTreatmentCommand;
 use App\Treatment\Domain\Enum\TreatmentType;
-use Doctrine\ORM\EntityManagerInterface;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
-use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\MessageBusInterface;
 
-final class PatientAdmissionEventListenerTest extends KernelTestCase
+final class PatientAdmissionEventListenerTest extends TestCase
 {
-    private AbstractDatabaseTool $databaseTool;
-
-    protected function setUp(): void
+    public function testItDispatchesAssignTreatmentCommand(): void
     {
-        parent::setUp();
-
-        $this->databaseTool = static::getContainer()
-            ->get(DatabaseToolCollection::class)
-            ->get();
-    }
-
-    public function testSubscriberPersistsPatientWithTreatment(): void
-    {
-        $this->databaseTool->loadFixtures([]);
-
         $patient = new Patient('Test', new \DateTimeImmutable('2000-01-01'), PatientStatus::ADMITTED);
 
-        $em = static::getContainer()->get(EntityManagerInterface::class);
+        $expectedCommand = new AssignTreatmentCommand($patient->id(), TreatmentType::MRI);
 
-        $listener = new PatientAdmittedListener($em);
-        $listener(new PatientAdmittedEvent($patient));
+        $bus = $this->createMock(MessageBusInterface::class);
+        $bus->expects(self::once())
+            ->method('dispatch')
+            ->with(
+                self::callback(function ($command) use ($patient) {
+                    return $command instanceof RecordActionCommand
+                        && 'patient.admitted' === $command->action
+                        && $command->payload['id']->equals($patient->id());
+                })
+            )
+            ->willReturnCallback(fn ($command) => new Envelope($command));
 
-        $em->clear();
-
-        $saved = $em->getRepository(Patient::class)->find($patient->id());
-
-        self::assertNotNull($saved);
-        self::assertTrue($saved->hasPendingTreatment(TreatmentType::MRI));
+        $listener = new PatientAdmittedListener($bus);
+        $listener(new PatientAdmittedEvent($patient->id()));
     }
 }

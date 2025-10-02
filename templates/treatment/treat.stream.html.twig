@@ -6,14 +6,9 @@
 
 <turbo-stream action="append" target="flashes">
     <template>
-        <div class="p-3 mb-2 rounded
-            {% if type == 'success' %} bg-green-100 text-green-800
-            {% elseif type == 'error' %} bg-red-100 text-red-800
-            {% endif %}
-        "
+        <div class="p-3 mb-2 rounded bg-blue-100 text-blue-800"
              data-controller="auto-dismiss"
-             data-auto-dismiss-timeout-value="5000"
-        >
+             data-auto-dismiss-timeout-value="5000">
             {{ message }}
         </div>
     </template>

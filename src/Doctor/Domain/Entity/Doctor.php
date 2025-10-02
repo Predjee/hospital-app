@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace App\Doctor\Domain\Entity;
 
 use App\Department\Domain\Entity\Department;
-use App\Doctor\Infrastructure\Repository\DoctorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Ulid;
 
-#[ORM\Entity(repositoryClass: DoctorRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'doctor')]
 class Doctor
 {

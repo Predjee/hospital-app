@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Patient\Domain\Entity;
 
 use App\Patient\Domain\Enum\PatientStatus;
-use App\Patient\Infrastructure\Repository\PatientRepository;
 use App\Treatment\Domain\Entity\Treatment;
 use App\Treatment\Domain\Enum\TreatmentType;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -13,7 +12,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Ulid;
 
-#[ORM\Entity(repositoryClass: PatientRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'patient')]
 class Patient
 {
@@ -148,5 +147,10 @@ class Patient
         return $this->treatments->exists(
             fn ($k, Treatment $t) => !$t->isCompleted() && $t->type() === $type
         );
+    }
+
+    public function markAsDone(Treatment $treatment): void
+    {
+        $treatment->complete();
     }
 }

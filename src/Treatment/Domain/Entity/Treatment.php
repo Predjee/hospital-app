@@ -112,8 +112,13 @@ class Treatment
             return null;
         }
 
-        return (int) $this->completedAt->diff($this->startedAt)->i
-            + 60 * (int) $this->completedAt->diff($this->startedAt)->h
-            + 1440 * (int) $this->completedAt->diff($this->startedAt)->d;
+        return $this->completedAt->diff($this->startedAt)->i
+            + 60 * $this->completedAt->diff($this->startedAt)->h
+            + 1440 * $this->completedAt->diff($this->startedAt)->d;
+    }
+
+    public function markAsCompleted(): void
+    {
+        $this->status = TreatmentStatus::COMPLETED;
     }
 }

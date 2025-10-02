@@ -4,59 +4,37 @@ declare(strict_types=1);
 
 namespace App\Treatment\UI\Http\Controller;
 
-use App\Patient\Application\Service\PatientSummaryFactory;
-use App\Treatment\Application\Strategy\TreatmentResolver;
-use App\Treatment\Domain\Event\TreatmentCompletedEvent;
-use App\Treatment\Domain\Event\TreatmentStartedEvent;
-use App\Treatment\Infrastructure\Repository\TreatmentRepository;
+use App\Treatment\Application\Command\PerformTreatmentCommand;
+use App\Treatment\Application\Result\TreatmentResult;
 use App\Treatment\UI\Input\TreatmentActionInput;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\Messenger\Exception\ExceptionInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Uid\Ulid;
 
 final class TreatmentController extends AbstractController
 {
+    /**
+     * @throws ExceptionInterface
+     */
     #[Route('/treat', name: 'treat_patient', methods: ['POST'])]
     public function __invoke(
         #[MapRequestPayload] TreatmentActionInput $dto,
-        TreatmentRepository $treatments,
-        TreatmentResolver $resolver,
-        EventDispatcherInterface $dispatcher,
-        PatientSummaryFactory $patientSummaryFactory,
+        MessageBusInterface $commandBus,
     ): Response {
-        try {
-            $treatment = $treatments->find($dto->treatmentId);
-            if (!$treatment) {
-                throw new \RuntimeException("Behandeling #{$dto->treatmentId} niet gevonden!");
-            }
+        $command = new PerformTreatmentCommand(Ulid::fromString($dto->treatmentId));
+        $envelope = $commandBus->dispatch($command);
 
-            $dispatcher->dispatch(new TreatmentStartedEvent($treatment->id(), $treatment->patient()->id(), new \DateTimeImmutable()));
-
-            $message = $resolver->resolve($treatment->patient(), $treatment->type());
-
-            $dispatcher->dispatch(new TreatmentCompletedEvent($treatment->id(), $treatment->patient()->id(), new \DateTimeImmutable()));
-
-            $type = 'success';
-
-            $patientSummary = $patientSummaryFactory->createFromEntity($treatment->patient());
-        } catch (\Throwable $e) {
-            $message = 'Fout bij behandeling: '.$e->getMessage();
-            $type = 'error';
-
-            return new Response(
-                $message,
-                Response::HTTP_UNPROCESSABLE_ENTITY,
-                ['Content-Type' => 'text/vnd.turbo-stream.html']
-            );
-        }
+        /** @var TreatmentResult $result */
+        $result = $envelope->last(HandledStamp::class)?->getResult();
 
         return $this->render('treatment/treat.stream.html.twig', [
-            'patient' => $patientSummary,
-            'treatment' => $treatment,
-            'message' => $message,
-            'type' => $type,
+            'patient' => $result->patientSummary,
+            'message' => $result->message,
         ], new Response(
             headers: ['Content-Type' => 'text/vnd.turbo-stream.html']
         ));

@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Audit Log{% endblock %}
+
+{% block body %}
+    <div class="max-w-5xl mx-auto p-6">
+        <h1 class="text-2xl font-bold mb-6">Audit Log</h1>
+
+        {% if logs is empty %}
+            <p class="text-gray-500">Nog geen audit entries gevonden.</p>
+        {% else %}
+            <div class="overflow-hidden rounded-xl border border-gray-200 shadow-sm">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Actie</th>
+                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Details</th>
+                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">Tijdstip</th>
+                    </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 bg-white">
+                    {% for log in logs %}
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-2">
+                                <span class="inline-flex items-center rounded-md bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">
+                                    {{ log.action }}
+                                </span>
+                            </td>
+                            <td class="px-4 py-2 text-sm text-gray-700">
+                                {% if log.payload is not empty %}
+                                    <pre class="whitespace-pre-wrap text-xs text-gray-600">
+                                        {{ log.payload|json_encode(constant('JSON_PRETTY_PRINT')) }}
+                                    </pre>
+                                {% else %}
+                                    <span class="text-gray-400 italic">geen details</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-4 py-2 text-sm text-gray-500">
+                                {{ log.recordedAt|date('d-m-Y H:i') }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
