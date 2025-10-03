@@ -14,6 +14,6 @@ class PatientControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/');
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h2', 'Patiëntsamenvattingen');
+        $this->assertSelectorTextContains('h2', 'Patient Summaries');
     }
 }

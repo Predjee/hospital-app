@@ -22,7 +22,7 @@ final class TreatmentResolverTest extends TestCase
         $resolver = new TreatmentResolver([new SurgeryTreatment()]);
         $message = $resolver->resolve($patient, TreatmentType::SURGERY);
 
-        $this->assertStringContainsString('onder het mes', $message);
+        $this->assertStringContainsString(' Don’t worry: the team is ready, the lights are bright, and the surgeon has already had their coffee.', $message);
     }
 
     public function testThrowsWhenNoStrategyFound(): void
@@ -33,7 +33,7 @@ final class TreatmentResolverTest extends TestCase
         $resolver = new TreatmentResolver([]);
 
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage("Dit had beter gechecked moeten worden, {$patient->name()} heeft geen behandelingen nodig!");
+        $this->expectExceptionMessage("This should have been validated earlier: {$patient->name()} does not require any treatments!");
 
         $resolver->resolve($patient, TreatmentType::MRI);
     }

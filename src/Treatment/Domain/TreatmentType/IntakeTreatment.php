@@ -22,9 +22,9 @@ class IntakeTreatment implements TreatmentStrategy
         $treatment = $patient->findTreatmentByType(TreatmentType::INTAKE);
 
         if (!$treatment) {
-            throw new \LogicException('Geen intake gevonden.');
+            throw new \LogicException('No intake found.');
         }
 
-        return "Goeiedag! {$patient->name()} wordt opgenomen voor een intake.";
+        return "Ow herrrrooooo! {$patient->name()} is admitted for an intake.";
     }
 }

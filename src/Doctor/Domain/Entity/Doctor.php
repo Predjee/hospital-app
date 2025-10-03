@@ -58,7 +58,7 @@ class Doctor
     {
         if (!$this->departments->contains($department)) {
             $this->departments->add($department);
-            $department->addDoctor($this); // sync inverse side
+            $department->addDoctor($this);
         }
     }
 

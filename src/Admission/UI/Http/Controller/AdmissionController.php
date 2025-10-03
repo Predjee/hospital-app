@@ -31,7 +31,7 @@ final class AdmissionController extends AbstractController
 
         return $this->render('admission/admit.stream.html.twig', [
             'patients' => $finder->all(),
-            'message' => "Nieuwe patiënt '{$intake->name}' toegevoegd.",
+            'message' => "New patient '{$intake->name}' admitted.",
         ], new Response(
             headers: ['Content-Type' => 'text/vnd.turbo-stream.html']
         ));

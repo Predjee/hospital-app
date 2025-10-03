@@ -12,8 +12,8 @@ enum PatientStatus: string
     public function label(): string
     {
         return match ($this) {
-            self::ADMITTED => 'Opgenomen',
-            self::DISCHARGED => 'Ontslagen',
+            self::ADMITTED => 'Admitted',
+            self::DISCHARGED => 'Discharged',
         };
     }
 

@@ -15,7 +15,7 @@ class PatientFixtures extends Fixture implements FixtureGroupInterface
 {
     public function load(ObjectManager $manager): void
     {
-        $faker = Faker::create('nl_NL');
+        $faker = Faker::create('en_US');
 
         for ($i = 0; $i < 25; ++$i) {
             $birthDate = $faker->dateTimeBetween('now', '100 years');

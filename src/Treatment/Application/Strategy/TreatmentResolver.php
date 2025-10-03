@@ -28,7 +28,7 @@ readonly class TreatmentResolver
 
             $message = $strategy->treat($patient);
 
-            /** @phpstan-ignore-next-line */
+            /* @phpstan-ignore-next-line */
             $patient->findTreatmentByType($type)->markAsCompleted();
 
             $patient->dischargeIfNoPendingTreatments();
@@ -36,6 +36,6 @@ readonly class TreatmentResolver
             return $message;
         }
 
-        throw new \LogicException("Dit had beter gechecked moeten worden, {$patient->name()} heeft geen behandelingen nodig!");
+        throw new \LogicException("This should have been validated earlier: {$patient->name()} does not require any treatments!");
     }
 }

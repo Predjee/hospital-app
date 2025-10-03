@@ -22,12 +22,12 @@ class SurgeryTreatment implements TreatmentStrategy
         $treatment = $patient->findTreatmentByType(TreatmentType::SURGERY);
 
         if (!$treatment) {
-            throw new \LogicException('Geen chirurgie behandeling gevonden.');
+            throw new \LogicException('No surgery treatment found.');
         }
 
-        return "Patiënt {$patient->name()} gaat onder het mes. "
-            .'Geen zorgen: het team staat klaar, de lampen zijn fel, '
-            .'en de chirurg heeft z’n koffie al gehad. '
-            .'Hopelijk wordt dit de snelste pitstop sinds Formule 1.';
+        return "Patient {$patient->name()} is heading into surgery. "
+            .'Don’t worry: the team is ready, the lights are bright, '
+            .'and the surgeon has already had their coffee. '
+            .'Hopefully this will be the fastest pit stop since Formula 1.';
     }
 }

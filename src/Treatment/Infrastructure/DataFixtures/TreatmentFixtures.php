@@ -20,7 +20,7 @@ class TreatmentFixtures extends Fixture implements FixtureGroupInterface, Depend
 {
     public function load(ObjectManager $manager): void
     {
-        $faker = Faker::create('nl_NL');
+        $faker = Faker::create('en_US');
         $patients = $manager->getRepository(Patient::class)->findAll();
 
         foreach ($patients as $patient) {

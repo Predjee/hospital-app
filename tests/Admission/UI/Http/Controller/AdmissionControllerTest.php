@@ -39,7 +39,7 @@ final class AdmissionControllerTest extends WebTestCase
         $this->assertResponseHeaderSame('content-type', 'text/vnd.turbo-stream.html; charset=UTF-8');
 
         $content = $this->client->getResponse()->getContent();
-        $this->assertStringContainsString('Nieuwe patiënt', $content);
+        $this->assertStringContainsString('New patient', $content);
     }
 
     public function testPatientAdmissionFailsWithInvalidDate(): void
@@ -52,6 +52,6 @@ final class AdmissionControllerTest extends WebTestCase
         ]);
 
         $this->assertResponseStatusCodeSame(422);
-        $this->assertStringNotContainsString('Nieuwe patiënt', $this->client->getResponse()->getContent());
+        $this->assertStringNotContainsString('New patient', $this->client->getResponse()->getContent());
     }
 }

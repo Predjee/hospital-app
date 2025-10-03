@@ -15,13 +15,13 @@ class DoctorFixtures extends Fixture implements FixtureGroupInterface
 {
     public function load(ObjectManager $manager): void
     {
-        $faker = Faker::create('nl_NL');
+        $faker = Faker::create('en_US');
 
         $departments = [
-            new Department('Radiologie'),
-            new Department('Chirurgie'),
-            new Department('Fysiotherapie'),
-            new Department('Revalidatie'),
+            new Department('Radiology'),
+            new Department('Surgery'),
+            new Department('Physiotherapy'),
+            new Department('Rehabilitation'),
         ];
 
         foreach ($departments as $department) {

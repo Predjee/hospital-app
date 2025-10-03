@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final class TreatmentActionInput
 {
-    #[Assert\NotBlank(message: 'Een behandeling is verplicht.')]
+    #[Assert\NotBlank(message: 'A treatment is required.')]
     public string $treatmentId {
         set => $this->treatmentId = trim($value);
     }

@@ -15,10 +15,10 @@ enum TreatmentType: string
     public function getLabel(): string
     {
         return match ($this) {
-            self::SURGERY => 'Operatie',
-            self::MRI => 'MRI-scan',
-            self::PHYSIOTHERAPY => 'Fysiotherapie',
-            self::REHAB => 'Revalidatie',
+            self::SURGERY => 'Surgery',
+            self::MRI => 'MRI Scan',
+            self::PHYSIOTHERAPY => 'Physiotherapy',
+            self::REHAB => 'Rehabilitation',
             self::INTAKE => 'Intake',
         };
     }

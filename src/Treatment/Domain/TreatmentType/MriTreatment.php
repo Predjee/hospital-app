@@ -22,10 +22,11 @@ class MriTreatment implements TreatmentStrategy
         $treatment = $patient->findTreatmentByType(TreatmentType::MRI);
 
         if (!$treatment) {
-            throw new \LogicException('Geen MRI behandeling gevonden.');
+            throw new \LogicException('No MRI treatment found.');
         }
 
-        return "Patiënt {$patient->name()} krijgt een MRI-scan. "
-            .'Belangrijkste regel: niet bewegen. Dus geen TikToks opnemen in de tunnel, hoe goed het ritme van het gebrom ook klinkt.';
+        return "Patient {$patient->name()} is scheduled for an MRI scan. "
+            .'Most important rule: do not move. So please, no TikToks inside the tunnel, '
+            .'no matter how catchy the hum of the machine may sound.';
     }
 }

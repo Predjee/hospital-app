@@ -22,10 +22,10 @@ class RehabTreatment implements TreatmentStrategy
         $treatment = $patient->findTreatmentByType(TreatmentType::REHAB);
 
         if (!$treatment) {
-            throw new \LogicException('Geen revalidatie behandeling gevonden.');
+            throw new \LogicException('No rehabilitation treatment found.');
         }
 
-        return "Patiënt {$patient->name()} is doorgestuurd naar de revalidatiezaal. "
-            ."En nee, dit is niet de Amy Winehouse-variant van rehab, hier moet je wél 'ja, ja, ja' zeggen tegen oefeningen.";
+        return "Patient {$patient->name()} has been sent to the rehab ward. "
+            ."And no, not the Amy Winehouse version of rehab—here you *do* say 'yes, yes, yes' to the exercises.";
     }
 }

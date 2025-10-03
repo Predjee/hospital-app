@@ -22,11 +22,11 @@ class PhysiotherapyTreatment implements TreatmentStrategy
         $treatment = $patient->findTreatmentByType(TreatmentType::PHYSIOTHERAPY);
 
         if (!$treatment) {
-            throw new \LogicException('Geen fysio behandeling gevonden.');
+            throw new \LogicException('No physiotherapy treatment found.');
         }
 
-        return "Patiënt {$patient->name()} moet flink aan de bak bij de fysiotherapeut. "
-            .'Dat betekent: squats, lunges en een beetje rekken—geen excuses. '
-            .'Als het voelt alsof je een marathon hebt gelopen, dan zit je goed.';
+        return "Patient {$patient->name()} has some serious work ahead with the physiotherapist. "
+            .'That means squats, lunges and a bit of stretching—no excuses. '
+            .'If it feels like you’ve just run a marathon, you’re on the right track.';
     }
 }
